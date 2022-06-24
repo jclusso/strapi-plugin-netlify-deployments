@@ -43,6 +43,9 @@ const getStateColor = (deploymentState) => {
       return "success700";
 
     case "building":
+    case "enqueued":
+    case "preparing":
+    case "processing":
       return "warning700"
 
     default:
@@ -62,10 +65,50 @@ const getStateBackgroundColor = (deploymentState) => {
     case "ready":
       return "success100";
 
+    case "building":
+    case "enqueued":
+    case "preparing":
+    case "processing":
+      return "warning100"
+
     default:
       return "neutral100";
   }
 };
+
+/**
+ * @param {DeploymentBranch} deploymentBranch
+ * @returns {string} Strapi color
+ */
+const getBranchColor = (deploymentBranch) => {
+  switch (deploymentBranch) {
+    case "master":
+      return "danger700";
+
+    default:
+      return "neutral700";
+  }
+};
+
+/**
+ * @param {DeploymentBranch} deploymentBranch
+ * @returns {string} Strapi color
+ */
+const getBranchBackgroundColor = (deploymentBranch) => {
+  switch (deploymentBranch) {
+    case "master":
+      return "danger100";
+
+    default:
+      return "neutral100";
+  }
+};
+
+const formatDeployTime = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`
+}
 
 const truncateTitle = (title) => {
   if (title == undefined) return title;
@@ -97,6 +140,12 @@ const DeploymentsList = ({ deployments, usePolling }) => {
           <Th>
             <FormattedMessage
               variant={headerFontVariant}
+              labelId="deployments-list.table-header.branch"
+            />
+          </Th>
+          <Th>
+            <FormattedMessage
+              variant={headerFontVariant}
               labelId="deployments-list.table-header.title"
             />
           </Th>
@@ -105,16 +154,17 @@ const DeploymentsList = ({ deployments, usePolling }) => {
               variant={headerFontVariant}
               labelId="deployments-list.table-header.state"
             />
-            {usePolling && (
-              <SymmetricBox paddingHorizontal={2} paddingVertical={0}>
-                <Loader small>{labelLoader}</Loader>
-              </SymmetricBox>
-            )}
           </Th>
           <Th>
             <FormattedMessage
               variant={headerFontVariant}
-              labelId="deployments-list.table-header.creation-date"
+              labelId="deployments-list.table-header.duration"
+            />
+          </Th>
+          <Th>
+            <FormattedMessage
+              variant={headerFontVariant}
+              labelId="deployments-list.table-header.time"
             />
           </Th>
         </Tr>
@@ -123,23 +173,43 @@ const DeploymentsList = ({ deployments, usePolling }) => {
         {deployments.map((entry) => (
           <Tr key={entry.id}>
             <Td>
+              <Badge
+                textColor={getBranchColor(entry.branch)}
+                backgroundColor={getBranchBackgroundColor(entry.branch)}
+              >
+                {entry.branch}
+              </Badge>
+            </Td>
+            <Td>
               <Typography textColor={cellTextColor}>{truncateTitle(entry.title)}</Typography>
             </Td>
             <Td>
-             {entry.error_message && <Tooltip description={entry.error_message}>
-                <Badge
+              <div style={{ display: "inline-flex", alignItems: "center" }}>
+              {entry.error_message && <Tooltip description={entry.error_message}>
+                  <Badge
+                    textColor={getStateColor(entry.state)}
+                    backgroundColor={getStateBackgroundColor(entry.state)}
+                  >
+                    {entry.state}
+                  </Badge>
+                </Tooltip>}
+                {!entry.error_message && <Badge
                   textColor={getStateColor(entry.state)}
                   backgroundColor={getStateBackgroundColor(entry.state)}
                 >
                   {entry.state}
-                </Badge>
-              </Tooltip>}
-              {!entry.error_message && <Badge
-                textColor={getStateColor(entry.state)}
-                backgroundColor={getStateBackgroundColor(entry.state)}
-              >
-                {entry.state}
-              </Badge>}
+                </Badge>}
+                {usePolling && !finalStates.includes(entry.state) && (
+                  <SymmetricBox paddingHorizontal={2} paddingVertical={0}>
+                    <Loader small>{labelLoader}</Loader>
+                  </SymmetricBox>
+                )}
+              </div>
+            </Td>
+            <Td>
+              <Typography textColor={cellTextColor}>
+                {entry.deploy_time ? formatDeployTime(entry.deploy_time) : "–"}
+              </Typography>
             </Td>
             <Td>
               <Typography textColor={cellTextColor}>
@@ -155,7 +225,7 @@ const DeploymentsList = ({ deployments, usePolling }) => {
                   variant="tertiary"
                   style={{ border: "none" }}
                 >
-                  <span><ExternalLink /></span>
+                  <ExternalLink />
                 </LinkButton>
               </Tooltip>}
               {!finalStates.includes(entry.state) && (<CancelDeployButton deployId={entry.id} />)}
