@@ -9,7 +9,7 @@
   "home-page.deployments.loader": "Fetching deployments",
 
   "settings-page.header.title": "Configuration",
-  "settings-page.header.subtitle": "Configure your Netlify Deployments plugin",
+  "settings-page.header.subtitle": "Configure the Netlify Deployments plugin",
   "settings-page.settings-container.loader": "Loading settings...",
   "settings-page.build-hook.label": "Build Hook",
   "settings-page.build-hook.placeholder": "You need to set `buildHook` in plugin config",
@@ -17,11 +17,11 @@
   "settings-page.build-hook.learn-more-link-text": "Netlify Build Hooks",
   "settings-page.access-token.label": "Access Token",
   "settings-page.access-token.placeholder": "You need to set `accessToken` in plugin config",
-  "settings-page.access-token.learn-more-intro": "Access tokens can be created and managed inside your",
+  "settings-page.access-token.learn-more-intro": "Access tokens can be created and managed under",
   "settings-page.access-token.learn-more-link-text": "user settings",
   "settings-page.site-id.label": "Site ID",
   "settings-page.site-id.placeholder": "You need to set `siteId` in plugin config",
-  "settings-page.site-id.learn-more-text": "Set the Site ID of your Netlify site found at Site settings > General to see only the deployments you need",
+  "settings-page.site-id.learn-more-text": "Set the Site ID of your Netlify site found under Site settings > General to the sites deployments",
 
   "deploy-button.label": "Deploy",
   "deploy-button.loader": "Deploying...",
