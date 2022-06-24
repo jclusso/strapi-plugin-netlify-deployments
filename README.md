@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/strapi-plugin-netlify-deployments.svg)](https://badge.fury.io/js/strapi-plugin-netlify-deployments)
 [![strapi market link](https://img.shields.io/badge/strapi-v4-blueviolet)](https://market.strapi.io/plugins/strapi-plugin-netlify-deployments)
 
-Strapi v4 plugin to trigger and monitor and cancel a deployment on Netlify.
+Strapi v4 plugin to trigger, monitor and cancel a deployment on Netlify.
 
 ## Plugin Preview
 
