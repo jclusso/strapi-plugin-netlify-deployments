@@ -5,8 +5,8 @@
  */
 
 import React from "react";
-import Upload from "@strapi/icons/Upload";
+import Server from "@strapi/icons/Server";
 
-const PluginIcon = () => <Upload />;
+const PluginIcon = () => <Server />;
 
 export default PluginIcon;

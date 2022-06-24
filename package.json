@@ -1,20 +1,20 @@
 {
-  "name": "strapi-plugin-vercel-deploy",
-  "version": "1.2.0",
-  "description": "Strapi v4 plugin to trigger and monitor a deployment on Vercel",
-  "repository": "https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy.git",
-  "author": "gianlucaparadise <gianlucaparadise@gmail.com>",
+  "name": "strapi-plugin-netlify-deployments",
+  "version": "1.0.0",
+  "description": "Strapi v4 plugin to trigger and monitor a deployment on Netlify",
+  "repository": "https://github.com/jclusso/strapi-plugin-netlify-deployments.git",
+  "author": "Jarrett Lusso <jclusso@gmail.com>",
   "license": "MIT",
   "strapi": {
-    "name": "vercel-deploy",
-    "displayName": "Vercel Deploy",
-    "description": "Plugin to trigger the deploy of a website hosted on Vercel.",
+    "name": "netlify-deployments",
+    "displayName": "Netlify Deployments",
+    "description": "Plugin to trigger the deploy of a website hosted on Netlify.",
     "kind": "plugin"
   },
   "maintainers": [
     {
-      "name": "Gianluca Paradiso",
-      "email": "gianlucaparadise@gmail.com"
+      "name": "Jarrett Lusso",
+      "email": "jclusso@gmail.com"
     }
   ],
   "publishConfig": {
@@ -32,8 +32,8 @@
   "keywords": [
     "strapi",
     "strapi-plugin",
+    "strapi-v4",
     "plugin",
-    "vercel",
-    "vercel-deploy"
+    "netlify"
   ]
 }

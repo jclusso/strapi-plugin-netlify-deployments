@@ -1,41 +1,39 @@
-# Vercel Deploy
+# Netlify Deployments
 
-[![npm version](https://badge.fury.io/js/strapi-plugin-vercel-deploy.svg)](https://badge.fury.io/js/strapi-plugin-vercel-deploy)
-[![strapi market link](https://img.shields.io/badge/strapi-v4-blueviolet)](https://market.strapi.io/plugins/strapi-plugin-vercel-deploy)
+[![npm version](https://badge.fury.io/js/strapi-plugin-netlify-deployments.svg)](https://badge.fury.io/js/strapi-plugin-netlify-deployments)
+[![strapi market link](https://img.shields.io/badge/strapi-v4-blueviolet)](https://market.strapi.io/plugins/strapi-plugin-netlify-deployments)
 
-Strapi v4 plugin to trigger and monitor a deployment on Vercel.
-
-![Vercel Deploy Logo](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy/raw/main/assets/strapi-vercel-deploy-logo.png "Vercel Deploy Logo")
+Strapi v4 plugin to trigger and monitor and cancel a deployment on Netlify.
 
 ## Plugin Preview
 
 Home Page:
 
-![Plugin Home Page](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy/raw/main/assets/strapi-vercel-deploy-home.png "Plugin Home Page")
+![Plugin Home Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/main/assets/strapi-netlify-deployments-home.png "Plugin Home Page")
 
 Settings Page:
 
-![Plugin Settings Page](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy/raw/main/assets/strapi-vercel-deploy-settings.png "Plugin Settings Page")
+![Plugin Settings Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/main/assets/strapi-netlify-deployments-settings.png "Plugin Settings Page")
 
 ## Installation
 
 ### Install dependency
 
-Run the following command in your Strapi project to install vercel-deploy:
+Run the following command in your Strapi project to install netlify-deployments:
 
 ```shell
-yarn add strapi-plugin-vercel-deploy
+yarn add strapi-plugin-netlify-deployments
 # or
-npm i -S strapi-plugin-vercel-deploy
+npm i -S strapi-plugin-netlify-deployments
 ```
 
 ### Enable plugin configuration
 
-Open `config/plugins.js` file and add the vercel-deploy entry:
+Open `config/plugins.js` file and add the netlify-deployments entry:
 
 ```js
 module.exports = ({ env }) => ({
-  "vercel-deploy": {
+  "netlify-deployments": {
     enabled: true,
   },
 });
@@ -49,7 +47,7 @@ You can now run Strapi:
 yarn develop
 ```
 
-You should see the **Vercel Deploy** menu in the left panel.
+You should see the **Netlify** menu in the left panel.
 
 **N.B.** You _may_ need to run `yarn build` in order to see the new menu entries.
 
@@ -63,14 +61,12 @@ Example:
 
 ```js
 module.exports = ({ env }) => ({
-  "vercel-deploy": {
+  "netlify-deployments": {
     enabled: true,
     config: {
-      deployHook:
-        "https://api.vercel.com/v1/integrations/deploy/prj_<deploy-hook>",
-      apiToken: "<vercel-api-token>",
-      appFilter: "your-app-name-on-vercel",
-      teamFilter: "your-team-id-on-vercel",
+      buildHook: "https://api.netlify.com/build_hooks/<hook_id>",
+      accessToken: "<netlify-access-token>",
+      siteId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     },
   },
 });
@@ -78,21 +74,17 @@ module.exports = ({ env }) => ({
 
 The plugin is reading the following configuration variables to work:
 
-- `deployHook`: Url of the git deploy hook exposed in Vercel.
+- `buildHook`: Url of the build hook in Netlify.
 
-  - You can follow [this](https://vercel.com/docs/git/deploy-hooks) guide to create a deploy hook on Vercel
+  - You can follow [this](https://docs.netlify.com/configure-builds/build-hooks/) guide to create a build hook on Netlify
 
-- `apiToken`: API token of your Vercel account used to fetch the list of deployments
+- `accessToken`: Access token of your Netlify account used to fetch the list of deployments
 
-  - Access tokens can be created and managed inside your [account settings](https://vercel.com/account/tokens)
+  - Access tokens can be created and managed inside your [user settings](https://app.netlify.com/user/applications#personal-access-tokens)
 
-- `appFilter`: Name of your Vercel App used to filter the list of deployments
+- `siteId`: Site ID of your Netlify site used to filter the list of deployments
 
-  - Set the name of your [Vercel App](https://vercel.com/dashboard) to see only the deployments you need
-
-- `teamFilter`: Id of your Vercel Team used to filter the list of deployments
-
-  - Set the id of your [Vercel Team](https://vercel.com/dashboard) to see only the deployments you need
+  - Set the Site ID of your [Netlify Site](https://app.netlify.com) to see only the deployments you need. This can be found at Site settings > General.
 
 ### Environment Configuration
 
@@ -100,13 +92,12 @@ You shouldn't disclose the api token and the deploy hook url for security reason
 
 ```js
 module.exports = ({ env }) => ({
-  "vercel-deploy": {
+  "netlify-deployments": {
     enabled: true,
     config: {
-      deployHook: process.env.VERCEL_DEPLOY_PLUGIN_HOOK,
-      apiToken: process.env.VERCEL_DEPLOY_PLUGIN_API_TOKEN,
-      appFilter: process.env.VERCEL_DEPLOY_PLUGIN_APP_FILTER,
-      teamFilter: process.env.VERCEL_DEPLOY_PLUGIN_TEAM_FILTER,
+      buildHook: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_BUILD_HOOK,
+      accessToken: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_ACCESS_TOKEN,
+      siteId: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_SITE_ID
     },
   },
 });
@@ -117,11 +108,15 @@ module.exports = ({ env }) => ({
 For local development, you can add the config properties in your `.env` file:
 
 ```shell
-VERCEL_DEPLOY_PLUGIN_HOOK="https://api.vercel.com/v1/integrations/deploy/prj_<deploy-hook>"
-VERCEL_DEPLOY_PLUGIN_API_TOKEN="<vercel-api-token>"
-VERCEL_DEPLOY_PLUGIN_APP_FILTER="your-app-name-on-vercel"
+NETLIFY_DEPLOYMENTS_PLUGIN_BUILD_HOOK="https://api.netlify.com/build_hooks/xxxxxxxxxxxxxxxxxxxxxxxx"
+NETLIFY_DEPLOYMENTS_PLUGIN_ACCESS_TOKEN="<netlify-access-token>"
+NETLIFY_DEPLOYMENTS_PLUGIN_SITE_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
 
 #### Server
 
 You can save these values as process env variable on your server (e.g. [this](https://devcenter.heroku.com/articles/config-vars) guide is for Heroku).
+
+## Credits
+
+Thanks to [gianlucaparadise](https://github.com/gianlucaparadise) for making [strapi-plugin-vercel-deploy](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy) which this heavily built from.

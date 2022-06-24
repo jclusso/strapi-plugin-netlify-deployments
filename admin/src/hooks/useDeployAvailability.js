@@ -25,7 +25,7 @@ export function useDeployAvailability() {
       })
       .catch((error) => {
         console.error(
-          "[vercel-deploy] error while retrieving availability",
+          "[netlify-deployments] error while retrieving availability",
           error
         );
         setAvailability({});

@@ -46,17 +46,14 @@ const BoxField = ({ fieldName, fieldHint, children }) => {
 };
 
 const SettingsContainer = () => {
-  const deployHookPlaceholder = useFormattedMessage(
-    "settings-page.deploy-hook.placeholder"
+  const buildHookPlaceholder = useFormattedMessage(
+    "settings-page.build-hook.placeholder"
   );
-  const apiTokenPlaceholder = useFormattedMessage(
-    "settings-page.api-token.placeholder"
+  const accessTokenPlaceholder = useFormattedMessage(
+    "settings-page.access-token.placeholder"
   );
-  const appNamePlaceholder = useFormattedMessage(
-    "settings-page.app-name.placeholder"
-  );
-  const teamIdPlaceholder = useFormattedMessage(
-    "settings-page.team-id.placeholder"
+  const siteIdPlaceholder = useFormattedMessage(
+    "settings-page.site-id.placeholder"
   );
   const labelLoader = useFormattedMessage(
     "settings-page.settings-container.loader"
@@ -76,7 +73,7 @@ const SettingsContainer = () => {
       })
       .catch((error) => {
         console.error(
-          "[vercel-deploy] error while retrieving plugin config",
+          "[netlify-deployments] error while retrieving plugin config",
           error
         );
         setPluginConfig({});
@@ -87,10 +84,9 @@ const SettingsContainer = () => {
       });
   }, [setIsLoading, setPluginConfig]);
 
-  const deployHook = pluginConfig.deployHook || "";
-  const apiToken = pluginConfig.apiToken || "";
-  const appFilter = pluginConfig.appFilter || "";
-  const teamFilter = pluginConfig.teamFilter || "";
+  const buildHook = pluginConfig.buildHook || "";
+  const accessToken = pluginConfig.accessToken || "";
+  const siteIdFilter = pluginConfig.siteId || "";
 
   if (isLoading) {
     return (
@@ -111,98 +107,67 @@ const SettingsContainer = () => {
   return (
     <>
       <BoxField
-        fieldName="vercel-deploy-hook"
+        fieldName="netlify-build-hook"
         fieldHint={
           <>
-            <FormattedMessage labelId="settings-page.deploy-hook.learn-more-intro" />
-            <ExternalLink href="https://vercel.com/docs/git/deploy-hooks">
-              <FormattedMessage labelId="settings-page.deploy-hook.learn-more-link-text" />
+            <FormattedMessage labelId="settings-page.build-hook.learn-more-intro" />
+            <ExternalLink href="https://docs.netlify.com/configure-builds/build-hooks/">
+              <FormattedMessage labelId="settings-page.build-hook.learn-more-link-text" />
             </ExternalLink>
           </>
         }
       >
         <Stack>
           <FieldLabel required>
-            <FormattedMessage labelId="settings-page.deploy-hook.label" />
+            <FormattedMessage labelId="settings-page.build-hook.label" />
           </FieldLabel>
           <FieldInput
             type="text"
-            placeholder={deployHookPlaceholder}
-            value={deployHook}
+            placeholder={buildHookPlaceholder}
+            value={buildHook}
             disabled={true}
           />
-          <FieldHint />
+<FieldHint />
         </Stack>
       </BoxField>
       <BoxField
-        fieldName="vercel-deploy-api-token"
+        fieldName="netlify-deployments-access-token"
         fieldHint={
           <>
-            <FormattedMessage labelId="settings-page.api-token.learn-more-intro" />
-            <ExternalLink href="https://vercel.com/account/tokens">
-              <FormattedMessage labelId="settings-page.api-token.learn-more-link-text" />
+            <FormattedMessage labelId="settings-page.access-token.learn-more-intro" />
+            <ExternalLink href="https://app.netlify.com/user/applications#personal-access-tokens">
+              <FormattedMessage labelId="settings-page.access-token.learn-more-link-text" />
             </ExternalLink>
           </>
         }
       >
         <Stack>
           <FieldLabel required>
-            <FormattedMessage labelId="settings-page.api-token.label" />
+            <FormattedMessage labelId="settings-page.access-token.label" />
           </FieldLabel>
           <FieldInput
             type="text"
-            placeholder={apiTokenPlaceholder}
-            value={apiToken}
+            placeholder={accessTokenPlaceholder}
+            value={accessToken}
             disabled={true}
           />
           <FieldHint />
         </Stack>
       </BoxField>
       <BoxField
-        fieldName="vercel-deploy-app-name"
+        fieldName="netlify-deployments-site-id"
         fieldHint={
-          <>
-            <FormattedMessage labelId="settings-page.app-name.learn-more-intro" />
-            <ExternalLink href="https://vercel.com/dashboard">
-              <FormattedMessage labelId="settings-page.app-name.learn-more-link-text" />
-            </ExternalLink>
-            <FormattedMessage labelId="settings-page.app-name.learn-more-outro" />
-          </>
+          <FormattedMessage labelId="settings-page.site-id.learn-more-text" />
         }
       >
         <Stack>
           <FieldLabel>
-            <FormattedMessage labelId="settings-page.app-name.label" />
+            <FormattedMessage labelId="settings-page.site-id.label" />
           </FieldLabel>
           <FieldInput
             type="text"
-            placeholder={appNamePlaceholder}
-            value={appFilter}
-            disabled={true}
-          />
-          <FieldHint />
-        </Stack>
-      </BoxField>
-      <BoxField
-        fieldName="vercel-deploy-team-id"
-        fieldHint={
-          <>
-            <FormattedMessage labelId="settings-page.team-id.learn-more-intro" />
-            <ExternalLink href="https://vercel.com/dashboard">
-              <FormattedMessage labelId="settings-page.team-id.learn-more-link-text" />
-            </ExternalLink>
-            <FormattedMessage labelId="settings-page.team-id.learn-more-outro" />
-          </>
-        }
-      >
-        <Stack>
-          <FieldLabel>
-            <FormattedMessage labelId="settings-page.team-id.label" />
-          </FieldLabel>
-          <FieldInput
-            type="text"
-            placeholder={teamIdPlaceholder}
-            value={teamFilter}
+            placeholder={siteIdPlaceholder}
+            value={siteIdFilter}
             disabled={true}
           />
           <FieldHint />

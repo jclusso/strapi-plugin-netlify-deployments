@@ -8,6 +8,14 @@ module.exports = [
     },
   },
   {
+    method: "POST",
+    path: "/deploy/:id/cancel",
+    handler: "deploy.cancelDeploy",
+    config: {
+      policies: [],
+    },
+  },
+  {
     method: "GET",
     path: "/config",
     handler: "config.getConfig",

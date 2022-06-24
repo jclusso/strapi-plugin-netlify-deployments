@@ -15,10 +15,9 @@ const buildConfig = (strapi) => {
   const pluginConfig = getPluginConfig(strapi);
 
   return {
-    deployHook: pluginConfig("deployHook"),
-    apiToken: pluginConfig("apiToken"),
-    appFilter: pluginConfig("appFilter"),
-    teamFilter: pluginConfig("teamFilter"),
+    buildHook: pluginConfig("buildHook"),
+    accessToken: pluginConfig("accessToken"),
+    siteId: pluginConfig("siteId"),
   };
 };
 

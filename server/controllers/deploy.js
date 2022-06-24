@@ -3,7 +3,7 @@
 module.exports = {
   async runDeploy(ctx) {
     const response = await strapi
-      .plugin("vercel-deploy")
+      .plugin("netlify-deployments")
       .service("deploy")
       .runDeploy();
 
@@ -13,9 +13,22 @@ module.exports = {
 
     ctx.body = response;
   },
+  async cancelDeploy(ctx) {
+    const { id } = ctx.params;
+    const response = await strapi
+      .plugin("netlify-deployments")
+      .service("deploy")
+      .cancelDeploy(id);
+
+    if (response.error) {
+      return ctx.internalServerError(`Server error: ${response.error}`);
+    }
+
+    ctx.body = response;
+  },
   async getDeployments(ctx) {
     const response = await strapi
-      .plugin("vercel-deploy")
+      .plugin("netlify-deployments")
       .service("deploy")
       .getDeployments();
 
@@ -27,7 +40,7 @@ module.exports = {
   },
   deployAvailability(ctx) {
     const response = strapi
-      .plugin("vercel-deploy")
+      .plugin("netlify-deployments")
       .service("deploy")
       .deployAvailability();
 

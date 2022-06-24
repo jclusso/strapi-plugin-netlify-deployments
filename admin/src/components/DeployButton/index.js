@@ -69,7 +69,7 @@ const DeployButton = ({
       const response = await runDeploy();
       if (onDeployed) onDeployed(false);
     } catch (error) {
-      console.error("[vercel-deploy] Error while running deploy", error);
+      console.error("[netlify-deployments] Error while running deploy", error);
       if (onDeployed) onDeployed(true);
       setHasDeployError(true);
     } finally {

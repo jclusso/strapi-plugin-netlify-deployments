@@ -12,7 +12,7 @@ import { getDeployments } from "../utils/api";
 const INTERVAL_DELAY = 1000;
 
 /** @type {DeploymentState[]} */
-const finalStates = ["CANCELED", "ERROR", "READY"];
+const finalStates = ["error", "ready"];
 
 /**
  * @param {Deployment[]} deployments
@@ -48,12 +48,12 @@ export function useDeployments(usePolling, onDeploymentsFetched) {
   const fetchDeployments = () => {
     getDeployments()
       .then((response) => {
-        setDeployments(response.deployments);
-        triggerCallback(response.deployments);
+        setDeployments(response);
+        triggerCallback(response);
       })
       .catch((error) => {
         console.error(
-          "[vercel-deploy] error while retrieving deployments",
+          "[netlify-deployments] error while retrieving deployments",
           error
         );
         setHasError(true);

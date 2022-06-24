@@ -11,17 +11,14 @@ module.exports = {
    * @param {PluginConfigMap} config
    */
   validator(config) {
-    if (config.deployHook && typeof config.deployHook !== "string") {
-      throw new Error("Config property `deployHook` has to be a string");
+    if (config.buildHook && typeof config.buildHook !== "string") {
+      throw new Error("Config property `buildHook` has to be a string");
     }
-    if (config.apiToken && typeof config.apiToken !== "string") {
-      throw new Error("Config property `apiToken` has to be a string");
+    if (config.accessToken && typeof config.accessToken !== "string") {
+      throw new Error("Config property `accessToken` has to be a string");
     }
-    if (config.appFilter && typeof config.appFilter !== "string") {
-      throw new Error("Config property `appFilter` has to be a string");
-    }
-    if (config.teamFilter && typeof config.teamFilter !== "string") {
-      throw new Error("Config property `teamFilter` has to be a string");
+    if (config.siteId && typeof config.siteId !== "string") {
+      throw new Error("Config property `siteId` has to be a string");
     }
   },
 };

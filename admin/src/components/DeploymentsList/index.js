@@ -12,11 +12,13 @@ import { LinkButton } from "@strapi/design-system/LinkButton";
 import { Badge } from "@strapi/design-system/Badge";
 import { Loader } from "@strapi/design-system/Loader";
 import ExternalLink from "@strapi/icons/ExternalLink";
-import Eye from "@strapi/icons/Eye";
+import CancelDeployButton from "../CancelDeployButton";
 
 import SymmetricBox from "../SymmetricBox";
 import FormattedMessage from "../FormattedMessage";
 import { useFormattedMessage } from "../../hooks/useFormattedMessage";
+
+const finalStates = ["error", "ready"];
 
 /**
  * @typedef {import('./typedefs').Props} Props
@@ -34,12 +36,14 @@ const getDate = (timestamp) => {
  */
 const getStateColor = (deploymentState) => {
   switch (deploymentState) {
-    case "ERROR":
-    case "CANCELED":
+    case "error":
       return "danger700";
 
-    case "READY":
+    case "ready":
       return "success700";
+
+    case "building":
+      return "warning700"
 
     default:
       return "neutral700";
@@ -52,17 +56,25 @@ const getStateColor = (deploymentState) => {
  */
 const getStateBackgroundColor = (deploymentState) => {
   switch (deploymentState) {
-    case "ERROR":
-    case "CANCELED":
+    case "error":
       return "danger100";
 
-    case "READY":
+    case "ready":
       return "success100";
 
     default:
       return "neutral100";
   }
 };
+
+const truncateTitle = (title) => {
+  if (title == undefined) return title;
+  if (title.length > 50) {
+    return `${title.substring(0, 50)}...`
+  } else {
+    return title;
+  };
+}
 
 /**
  * Displays the table with the deployments
@@ -85,7 +97,7 @@ const DeploymentsList = ({ deployments, usePolling }) => {
           <Th>
             <FormattedMessage
               variant={headerFontVariant}
-              labelId="deployments-list.table-header.app-name"
+              labelId="deployments-list.table-header.title"
             />
           </Th>
           <Th>
@@ -105,55 +117,48 @@ const DeploymentsList = ({ deployments, usePolling }) => {
               labelId="deployments-list.table-header.creation-date"
             />
           </Th>
-          <Th />
         </Tr>
       </Thead>
       <Tbody>
         {deployments.map((entry) => (
-          <Tr key={entry.uid}>
+          <Tr key={entry.id}>
             <Td>
-              <Typography textColor={cellTextColor}>{entry.name}</Typography>
+              <Typography textColor={cellTextColor}>{truncateTitle(entry.title)}</Typography>
             </Td>
             <Td>
-              <Badge
+             {entry.error_message && <Tooltip description={entry.error_message}>
+                <Badge
+                  textColor={getStateColor(entry.state)}
+                  backgroundColor={getStateBackgroundColor(entry.state)}
+                >
+                  {entry.state}
+                </Badge>
+              </Tooltip>}
+              {!entry.error_message && <Badge
                 textColor={getStateColor(entry.state)}
                 backgroundColor={getStateBackgroundColor(entry.state)}
               >
                 {entry.state}
-              </Badge>
+              </Badge>}
             </Td>
             <Td>
               <Typography textColor={cellTextColor}>
-                {getDate(entry.created)}
+                {getDate(entry.created_at)}
               </Typography>
             </Td>
             <Td>
-              <Tooltip
-                description={
-                  <FormattedMessage labelId="deployments-list.table-body.visit-url-text" />
-                }
-              >
+              {entry.state == 'ready' && <Tooltip description={
+                <FormattedMessage labelId="deployments-list.table-body.visit-url-text" />
+              }>
                 <LinkButton
-                  href={entry.url}
+                  href={entry.links.permalink}
                   variant="tertiary"
                   style={{ border: "none" }}
                 >
-                  <ExternalLink />
+                  <span><ExternalLink /></span>
                 </LinkButton>
-              </Tooltip>
-              <Tooltip
-                description={
-                  <FormattedMessage labelId="deployments-list.table-body.inspect-url-text" />
-                }
-              >
-                <LinkButton
-                  href={entry.inspectorUrl}
-                  variant="tertiary"
-                  style={{ border: "none" }}
-                >
-                  <Eye />
-                </LinkButton>
-              </Tooltip>
+              </Tooltip>}
+              {!finalStates.includes(entry.state) && (<CancelDeployButton deployId={entry.id} />)}
             </Td>
           </Tr>
         ))}

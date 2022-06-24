@@ -4,6 +4,7 @@ import pluginId from "../pluginId";
 /**
  * @typedef {import('../../../types/typedefs').PluginConfig} PluginConfig
  * @typedef {import('../../../types/typedefs').RunDeployResponse} RunDeployResponse
+ * @typedef {import('../../../types/typedefs').CancelDeployResponse} CancelDeployResponse
  * @typedef {import('../../../types/typedefs').GetDeploymentsResponse} GetDeploymentsResponse
  * @typedef {import('../../../types/typedefs').DeployAvailabilityResponse} DeployAvailabilityResponse
  */
@@ -17,7 +18,21 @@ export const runDeploy = async () => {
     const data = await axios(`/${pluginId}/deploy/run`, { method: "GET" });
     return data.data;
   } catch (error) {
-    console.error("[vercel-deploy] Error while running a deploy -", error);
+    console.error("[netlify-deployments] Error while running a deploy -", error);
+    throw error;
+  }
+};
+
+/**
+ * Cancel a deploy
+ * @returns {Promise<CancelDeployResponse>}
+ */
+export const cancelDeploy = async (id) => {
+  try {
+    const data = await axios(`/${pluginId}/deploy/${id}/cancel`, { method: "POST" });
+    return data.data;
+  } catch (error) {
+    console.error("[netlify-deployments] Error while cancelling a deploy -", error);
     throw error;
   }
 };
@@ -31,7 +46,7 @@ export const getConfig = async () => {
     const response = await axios(`/${pluginId}/config`, { method: "GET" });
     return response.data;
   } catch (error) {
-    console.error("[vercel-deploy] Error while fetching configs -", error);
+    console.error("[netlify-deployments] Error while fetching configs -", error);
     throw error;
   }
 };
@@ -46,7 +61,7 @@ export const getDeployments = async () => {
     return response.data;
   } catch (error) {
     console.error(
-      "[vercel-deploy] Error while fetching deployments list -",
+      "[netlify-deployments] Error while fetching deployments list -",
       error
     );
     throw error;
@@ -65,7 +80,7 @@ export const deployAvailability = async () => {
     return response.data;
   } catch (error) {
     console.error(
-      "[vercel-deploy]: Error while fetching deploy availability -",
+      "[netlify-deployments]: Error while fetching deploy availability -",
       error
     );
     throw error;

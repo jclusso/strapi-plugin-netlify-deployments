@@ -30,7 +30,7 @@ const getMessage = (type) => {
       return (
         <>
           <FormattedMessage labelId="deploy-error-message.missing-config-variable.intro" />
-          <Link to="/settings/vercel-deploy">
+          <Link to="/settings/netlify-deployments">
             <FormattedMessage labelId="deploy-error-message.missing-config-variable.link-text" />
           </Link>
           <FormattedMessage labelId="deploy-error-message.missing-config-variable.outro" />

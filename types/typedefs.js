@@ -16,10 +16,9 @@
 /**
  * Plugin config map
  * @typedef {Object} PluginConfigMap
- * @property {?string} deployHook Url of the git deploy hook exposed in Vercel. Plugin config: `deployHook`
- * @property {?string} apiToken API token for the Vercel integration. Plugin config: `apiToken`
- * @property {?string} appFilter Name of the app to filter Vercel deployments. Plugin config: `appFilter`
- * @property {?string} teamFilter Id of the team to filter Vercel deployments. Plugin config: `teamFilter`
+ * @property {?string} buildHook Url of the build hook exposed in Netlify. Plugin config: `buildHook`
+ * @property {?string} accessToken Access token for the Netlify user. Plugin config: `accessToken`
+ * @property {?string} siteId Site Id of the site to filter Netlify deployments. Plugin config: `siteId`
  */
 
 /**
@@ -67,11 +66,11 @@
  * @property {string} url The URL of the deployment.
  * @property {number} created Timestamp of when the deployment got created.
  * @property {DeploymentState} state In which state is the deployment.
- * @property {string} inspectorUrl Vercel URL to inspect the deployment.
+ * @property {string} inspectorUrl Netlify URL to inspect the deployment.
  */
 
 /**
- * This list is taken from https://vercel.com/docs/rest-api#endpoints/deployments
+ * This list is taken from https://open-api.netlify.com/#tag/deploy
  * @typedef {"BUILDING"|"ERROR"|"INITIALIZING"|"QUEUED"|"READY"|"CANCELED"} DeploymentState
  */
 

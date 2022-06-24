@@ -10,6 +10,7 @@ const { buildConfig, getFeatureAvailability } = require("./utils");
 
 /**
  * @typedef {import('../../types/typedefs').RunDeployResponse} RunDeployResponse
+ * @typedef {import('../../types/typedefs').CancelDeployResponse} CancelDeployResponse
  * @typedef {import('../../types/typedefs').DeployAvailabilityResponse} DeployAvailabilityResponse
  * @typedef {import('../../types/typedefs').GetDeploymentsResponse} GetDeploymentsResponse
  */
@@ -22,26 +23,21 @@ module.exports = ({ strapi }) => ({
   async runDeploy() {
     try {
       const config = buildConfig(strapi);
-      if (!config || !config.deployHook) {
-        throw "missing configuration: deployHook";
+      if (!config || !config.buildHook) {
+        throw "missing configuration: buildHook";
       }
 
-      const response = await axios.post(config.deployHook);
+      const response = await axios.post(config.buildHook);
 
-      const deployJobId = response?.data?.job?.id;
-      if (!deployJobId) {
+      if (response?.status != 200) {
         throw new Error(
-          `Deployment Id not received. Response: ${JSON.stringify(response)}`
+          `Deployment error. Response: ${JSON.stringify(response)}`
         );
       }
 
-      return {
-        data: {
-          deployJobId,
-        },
-      };
+      return true;
     } catch (error) {
-      console.error("[vercel-deploy] Error while deploying -", error);
+      console.error("[netlify-deployments] Error while deploying -", error);
       return {
         error: "An error occurred",
       };
@@ -49,40 +45,57 @@ module.exports = ({ strapi }) => ({
   },
 
   /**
-   * Fetch the list of deployments from Vercel
+   * Cancel a deploy
+   * @returns {CancelDeployResponse}
+   */
+  async cancelDeploy(id) {
+    try {
+      const config = buildConfig(strapi);
+      if (!config || !config.accessToken) {
+        throw "missing configuration: buildHook";
+      }
+
+      const response = await axios.post(
+        `https://api.netlify.com/api/v1/deploys/${id}/cancel?access_token=${config.accessToken}`
+      );
+
+      if (response?.status != 200) {
+        throw new Error(
+          `Deployment error. Response: ${JSON.stringify(response)}`
+        );
+      }
+
+      return true;
+    } catch (error) {
+      console.error("[netlify-deployments] Error while cancelling deploy -", error);
+      return {
+        error: "An error occurred",
+      };
+    }
+  },
+
+  /**
+   * Fetch the list of deployments from Netlify
    * @returns {GetDeploymentsResponse}
    */
   async getDeployments() {
     try {
       const config = buildConfig(strapi);
-      if (!config || !config.apiToken) {
-        throw "missing configuration: deployHook";
+      if (!config || !config.accessToken) {
+        throw "missing configuration: buildHook";
       }
 
-      const params = {};
-
-      if (config.appFilter) {
-        params.app = config.appFilter;
-      }
-
-      if (config.teamFilter) {
-        params.teamId = config.teamFilter;
-      }
+      const params = {  access_token: config.accessToken };
 
       const response = await axios.get(
-        "https://api.vercel.com/v6/deployments",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${config.apiToken}`,
-          },
-          params,
-        }
+        `https://api.netlify.com/api/v1/sites/${config.siteId}/deploys`,
+        { params, }
       );
+
       return response.data;
     } catch (error) {
       console.error(
-        "[vercel-deploy] Error while fetching deployments -",
+        "[netlify-deployments] Error while fetching deployments -",
         error
       );
       return {
@@ -100,29 +113,24 @@ module.exports = ({ strapi }) => ({
       const config = buildConfig(strapi);
       const runDeployAvailability = getFeatureAvailability(
         config,
-        "deployHook"
+        "buildHook"
       );
-      const listDeployAvailability = getFeatureAvailability(config, "apiToken");
+      const listDeployAvailability = getFeatureAvailability(config, "accessToken");
       const filterDeployAvailabilityPerName = getFeatureAvailability(
         config,
-        "appFilter"
-      );
-      const filterDeployAvailabilityPerTeam = getFeatureAvailability(
-        config,
-        "teamFilter"
+        "siteId"
       );
 
       return {
         data: {
           runDeploy: runDeployAvailability,
           listDeploy: listDeployAvailability,
-          filterDeployPerAppName: filterDeployAvailabilityPerName,
-          filterDeployPerTeamId: filterDeployAvailabilityPerTeam,
+          filterDeployPerAppName: filterDeployAvailabilityPerName
         },
       };
     } catch (error) {
       console.error(
-        "[vercel-deploy] Error while building deploy availability -",
+        "[netlify-deployments] Error while building deploy availability -",
         error
       );
       return {

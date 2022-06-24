@@ -13,7 +13,7 @@ export default {
       icon: PluginIcon,
       intlLabel: {
         id: `${pluginId}.plugin.name`,
-        defaultMessage: "Vercel Deploy",
+        defaultMessage: "Netlify Deployments",
       },
       Component: async () => {
         const component = await import(
@@ -37,7 +37,7 @@ export default {
         id: settingsBaseName,
         intlLabel: {
           id: `${settingsBaseName}.links-header`,
-          defaultMessage: "Vercel Deploy",
+          defaultMessage: "Netlify Deployments",
         },
       },
       [
