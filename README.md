@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/strapi-plugin-netlify-deployments.svg)](https://badge.fury.io/js/strapi-plugin-netlify-deployments)
 [![strapi market link](https://img.shields.io/badge/strapi-v4-blueviolet)](https://market.strapi.io/plugins/strapi-plugin-netlify-deployments)
 
-Strapi v4 plugin to trigger, monitor and cancel a deployment on Netlify.
+Strapi v4 plugin to trigger, monitor, and cancel deployments on Netlify.
 
 ## Plugin Preview
 
@@ -47,9 +47,9 @@ You can now run Strapi:
 yarn develop
 ```
 
-You should see the **Netlify** menu in the left panel.
+You should see the **Netlify Deployments** menu in the left panel.
 
-**N.B.** You _may_ need to run `yarn build` in order to see the new menu entries.
+**Note:** You _may_ need to run `yarn build` in order to see the new menu entries.
 
 Then you can proceed with the plugin configuration.
 
@@ -74,13 +74,13 @@ module.exports = ({ env }) => ({
 
 The plugin is reading the following configuration variables to work:
 
-- `buildHook`: Url of the build hook in Netlify.
+- `buildHook`: URL of the Build Hook in Netlify.
 
   - You can follow [this](https://docs.netlify.com/configure-builds/build-hooks/) guide to create a build hook on Netlify
 
 - `accessToken`: Access token of your Netlify account used to fetch the list of deployments
 
-  - Access tokens can be created and managed inside your [user settings](https://app.netlify.com/user/applications#personal-access-tokens)
+  - Access tokens can be created and managed on your [user settings](https://app.netlify.com/user/applications#personal-access-tokens)
 
 - `siteId`: Site ID of your Netlify site used to filter the list of deployments
 
@@ -88,7 +88,7 @@ The plugin is reading the following configuration variables to work:
 
 ### Environment Configuration
 
-You shouldn't disclose the api token and the deploy hook url for security reasons. Therefore, you shouldn't add these values to versioning in a public git repository. A suggested solution is to use environment variables. Example:
+You shouldn't disclose the Access Token or Build Hook for security reasons. Therefore, you shouldn't add these values to versioning in a public git repository. A suggested solution is to use environment variables. Example:
 
 ```js
 module.exports = ({ env }) => ({
@@ -119,4 +119,4 @@ You can save these values as process env variable on your server (e.g. [this](ht
 
 ## Credits
 
-Thanks to [gianlucaparadise](https://github.com/gianlucaparadise) for making [strapi-plugin-vercel-deploy](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy) which this heavily built from.
+Thanks to [gianlucaparadise](https://github.com/gianlucaparadise) for making [strapi-plugin-vercel-deploy](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy) which this is heavily built from.
