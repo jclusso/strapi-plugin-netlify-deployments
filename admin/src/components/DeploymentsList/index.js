@@ -12,6 +12,7 @@ import { LinkButton } from "@strapi/design-system/LinkButton";
 import { Badge } from "@strapi/design-system/Badge";
 import { Loader } from "@strapi/design-system/Loader";
 import ExternalLink from "@strapi/icons/ExternalLink";
+import Layer from "@strapi/icons/Layer";
 import CancelDeployButton from "../CancelDeployButton";
 
 import SymmetricBox from "../SymmetricBox";
@@ -217,6 +218,17 @@ const DeploymentsList = ({ deployments, usePolling }) => {
               </Typography>
             </Td>
             <Td>
+              <Tooltip description={
+                <FormattedMessage labelId="deployments-list.table-body.deploy-log-url-text" />
+              }>
+                <LinkButton
+                  href={`${entry.admin_url}/deploys/${entry.id}`}
+                  variant="tertiary"
+                  style={{ border: "none" }}
+                >
+                  <Layer />
+                </LinkButton>
+              </Tooltip>
               {entry.state == 'ready' && <Tooltip description={
                 <FormattedMessage labelId="deployments-list.table-body.visit-url-text" />
               }>

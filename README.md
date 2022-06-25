@@ -9,11 +9,11 @@ Strapi v4 plugin to trigger, monitor and cancel a deployment on Netlify.
 
 Home Page:
 
-![Plugin Home Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/main/assets/strapi-netlify-deployments-home.png "Plugin Home Page")
+![Plugin Home Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/master/assets/strapi-netlify-deployments-home.png "Plugin Home Page")
 
 Settings Page:
 
-![Plugin Settings Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/main/assets/strapi-netlify-deployments-settings.png "Plugin Settings Page")
+![Plugin Settings Page](https://github.com/jclusso/strapi-plugin-netlify-deployments/raw/master/assets/strapi-netlify-deployments-settings.png "Plugin Settings Page")
 
 ## Installation
 

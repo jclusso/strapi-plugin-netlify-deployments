@@ -25,7 +25,6 @@
 
   "deploy-button.label": "Deploy",
   "deploy-button.loader": "Deploying...",
-
   "cancel-deploy-button.text": "Cancel",
 
   "deploy-error-message.missing-config-object": "Unexpected config error: the config object is empty",
@@ -54,5 +53,6 @@
   "deployments-list.table-header.duration": "Duration",
   "deployments-list.table-header.time": "Time",
   "deployments-list.table-body.visit-url-text": "Visit",
+  "deployments-list.table-body.deploy-log-url-text": "Deploy Log",
   "deployments-list.table-body.inspect-url-text": "Inspect"
 }

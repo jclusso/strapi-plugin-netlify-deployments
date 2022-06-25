@@ -10,7 +10,7 @@ import { cancelDeploy } from "../../utils/api";
 import { LinkButton } from "@strapi/design-system/LinkButton";
 import FormattedMessage from "../FormattedMessage";
 import { Tooltip } from "@strapi/design-system/Tooltip";
-import PlaySquare from "@strapi/icons/PlaySquare";
+import Cross from "@strapi/icons/Cross";
 
 
 /**
@@ -42,7 +42,7 @@ const CancelDeployButton = ({
         variant="tertiary"
         style={{ border: "none" }}
       >
-        <PlaySquare />
+        <Cross />
       </LinkButton>
     </Tooltip>
   );
