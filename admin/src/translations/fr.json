@@ -2,34 +2,33 @@
   "netlify-deployments.plugin.name": "Déploiements Netlify",
   "netlify-deployments-settings.links-header": "Déploiements Netlify",
   "netlify-deployments-settings.link-configuration-label": "Configuration",
+
   "home-page.header.title": "Déploiements Netlify",
   "home-page.header.subtitle": "Consultez le déploiement actuel et passés ci-dessous et lancez un nouveau déploiement en cliquant le bouton \"Déployer\"",
   "home-page.deployments.loader": "Récupération des déploiements",
+
   "settings-page.header.title": "Configuration",
   "settings-page.header.subtitle": "Configurer le plugin Déploiements Netlify",
   "settings-page.settings-container.loader": "Chargement des paramètres...",
-  "settings-page.build-hook.label": "Build Hook",
-  "settings-page.build-hook.placeholder": "Vous devez définir le `buildHook` dans la configuration du plugin",
-  "settings-page.build-hook.learn-more-intro": "Découvrez en plus",
-  "settings-page.build-hook.learn-more-link-text": "Netlify Build Hooks",
   "settings-page.access-token.label": "Token d'accès",
   "settings-page.access-token.placeholder": "Vous devez définir le `accessToken` dans la configuration du plugin",
   "settings-page.access-token.learn-more-intro": "Les tokens d'accès peuvent être créés et gérés ci-dessous",
   "settings-page.access-token.learn-more-link-text": "Paramètres utilisateurs",
-  "settings-page.site-id.label": "ID du site",
-  "settings-page.site-id.placeholder": "Vous devez définir le `siteId` dans la configuration du plugin",
-  "settings-page.site-id.learn-more-text": "Définissez l'ID du site de votre site Netlify trouvable dans Site settings > General",
+  "settings-page.sites.label": "Sites",
+  "settings-page.sites.learn-more-text": "Site IDs for your Netlify sites can be found under Site settings > General",
+
   "deploy-button.label": "Déployer",
+  "deploy-button.confirm-text": "Are you sure you want to deploy this site?",
   "deploy-button.loader": "Déploiement...",
   "cancel-deploy-button.text": "Annuler",
+
   "deploy-error-message.missing-config-object": "Erreur de configuration: l'objet config est vide",
-  "deploy-error-message.missing-config-variable.intro": "Erreur de configuration: Vous n'avez pas défini le build hook de Netlify. Allez dans",
-  "deploy-error-message.missing-config-variable.link-text": "Paramètres du plugin",
-  "deploy-error-message.missing-config-variable.outro": " pour plus d'informations",
   "deploy-error-message.error-availability": "Erreur de disponibilité: veuillez re-essayer",
   "deploy-error-message.error-deploy": "Erreur de déploiement: veuillez re-essayer",
   "deploy-error-message.default": "Erreur inattendue",
+
   "deployments-container.loader": "Chargement du contenu...",
+
   "deployments-empty-state.missing-config-object": "L'objet config est vide et ceci est inattendu",
   "deployments-empty-state.missing-config-variable.intro": "Vous n'avez pas défini le token d'accès Netlify. Allez dans ",
   "deployments-empty-state.missing-config-variable.link-text": "Paramètres du plugin",
@@ -39,6 +38,7 @@
   "deployments-empty-state.error-availability": "Une erreur s'est produite lors du chargement des fonctionnalités disponibles. Veuillez re-essayer",
   "deployments-empty-state.error-config": "Une erreur s'est produite lors du chargement de la configuration. Veuillez re-essayer.",
   "deployments-empty-state.default": "Une erreur s'est produite",
+
   "deployments-list.table-header.title": "Titre",
   "deployments-list.table-header.state": "Etat",
   "deployments-list.table-header.branch": "Branche",
@@ -46,5 +46,11 @@
   "deployments-list.table-header.time": "Date",
   "deployments-list.table-body.visit-url-text": "Visiter",
   "deployments-list.table-body.deploy-log-url-text": "Journal de déploiement",
-  "deployments-list.table-body.inspect-url-text": "Inspecter"
+  "deployments-list.table-body.inspect-url-text": "Inspecter",
+
+  "sites-list.table-header.name": "Name",
+  "sites-list.table-header.id": "ID",
+
+  "generic.cancel": "Cancel",
+  "generic.confirmation": "Confirmation"
 }

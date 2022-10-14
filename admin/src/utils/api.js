@@ -6,16 +6,15 @@ import pluginId from "../pluginId";
  * @typedef {import('../../../types/typedefs').RunDeployResponse} RunDeployResponse
  * @typedef {import('../../../types/typedefs').CancelDeployResponse} CancelDeployResponse
  * @typedef {import('../../../types/typedefs').GetDeploymentsResponse} GetDeploymentsResponse
- * @typedef {import('../../../types/typedefs').DeployAvailabilityResponse} DeployAvailabilityResponse
  */
 
 /**
  * Start a deploy
  * @returns {Promise<RunDeployResponse>}
  */
-export const runDeploy = async () => {
+export const runDeploy = async (id) => {
   try {
-    const data = await axios(`/${pluginId}/deploy/run`, { method: "GET" });
+    const data = await axios(`/${pluginId}/sites/${id}/deploy/run`, { method: "GET" });
     return data.data;
   } catch (error) {
     console.error("[netlify-deployments] Error while running a deploy -", error);
@@ -55,32 +54,13 @@ export const getConfig = async () => {
  * Fetch and return Deployments info
  * @returns {Promise<GetDeploymentsResponse>}
  */
-export const getDeployments = async () => {
+export const getDeployments = async (siteId) => {
   try {
-    const response = await axios(`/${pluginId}/deploy/list`, { method: "GET" });
+    const response = await axios(`/${pluginId}/sites/${siteId}/deploy/list`, { method: "GET" });
     return response.data;
   } catch (error) {
     console.error(
       "[netlify-deployments] Error while fetching deployments list -",
-      error
-    );
-    throw error;
-  }
-};
-
-/**
- * Fetch the availability for each deploy feature
- * @returns {Promise<DeployAvailabilityResponse>}
- */
-export const deployAvailability = async () => {
-  try {
-    const response = await axios(`/${pluginId}/deploy/availability`, {
-      method: "GET",
-    });
-    return response.data;
-  } catch (error) {
-    console.error(
-      "[netlify-deployments]: Error while fetching deploy availability -",
       error
     );
     throw error;

@@ -2,10 +2,11 @@
 
 module.exports = {
   async runDeploy(ctx) {
+    const { id } = ctx.params;
     const response = await strapi
       .plugin("netlify-deployments")
       .service("deploy")
-      .runDeploy();
+      .runDeploy(id);
 
     if (response.error) {
       return ctx.internalServerError(`Server error: ${response.error}`);
@@ -27,22 +28,11 @@ module.exports = {
     ctx.body = response;
   },
   async getDeployments(ctx) {
+    const { id } = ctx.params;
     const response = await strapi
       .plugin("netlify-deployments")
       .service("deploy")
-      .getDeployments();
-
-    if (response.error) {
-      return ctx.internalServerError(`Server error: ${response.error}`);
-    }
-
-    ctx.body = response;
-  },
-  deployAvailability(ctx) {
-    const response = strapi
-      .plugin("netlify-deployments")
-      .service("deploy")
-      .deployAvailability();
+      .getDeployments(id);
 
     if (response.error) {
       return ctx.internalServerError(`Server error: ${response.error}`);

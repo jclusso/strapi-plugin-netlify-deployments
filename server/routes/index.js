@@ -1,7 +1,7 @@
 module.exports = [
   {
     method: "GET",
-    path: "/deploy/run",
+    path: "/sites/:id/deploy/run",
     handler: "deploy.runDeploy",
     config: {
       policies: [],
@@ -25,16 +25,8 @@ module.exports = [
   },
   {
     method: "GET",
-    path: "/deploy/list",
+    path: "/sites/:id/deploy/list",
     handler: "deploy.getDeployments",
-    config: {
-      policies: [],
-    },
-  },
-  {
-    method: "GET",
-    path: "/deploy/availability",
-    handler: "deploy.deployAvailability",
     config: {
       policies: [],
     },

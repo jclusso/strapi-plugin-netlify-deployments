@@ -27,11 +27,10 @@ const containsNonFinalState = (deployments) => {
 
 /**
  * Fetch and return the list of deployments
- * @param {boolean} usePolling
- * @param {DeploymentsFetched} onDeploymentsFetched
+ * @param {boolean} isPolling
  * @returns {[Boolean, Deployment[], Boolean]} [isLoading, deployments, hasError]
  */
-export function useDeployments(usePolling, onDeploymentsFetched) {
+export function useDeployments(isPolling, siteId, setPolling) {
   /** @type {Deployment[]} */
   const initialDeployments = [];
   const [deployments, setDeployments] = useState(initialDeployments);
@@ -40,13 +39,17 @@ export function useDeployments(usePolling, onDeploymentsFetched) {
 
   /** @param {Deployment[]} deployments */
   const triggerCallback = (deployments) => {
-    if (!onDeploymentsFetched) return;
-    const hasNonFinalState = containsNonFinalState(deployments);
-    onDeploymentsFetched(hasNonFinalState);
+    setPolling(containsNonFinalState(deployments));
   };
 
+  const clearDeployments = () => {
+    setDeployments([]);
+    setIsLoadingDeployments(true);
+    setPolling(false);
+  }
+
   const fetchDeployments = () => {
-    getDeployments()
+    getDeployments(siteId)
       .then((response) => {
         setDeployments(response);
         triggerCallback(response);
@@ -66,20 +69,11 @@ export function useDeployments(usePolling, onDeploymentsFetched) {
   };
 
   useEffect(() => {
-    if (!usePolling) {
-      fetchDeployments();
-    }
-  }, [
-    setDeployments,
-    setIsLoadingDeployments,
-    usePolling,
-    onDeploymentsFetched,
-  ]);
+    if (!isPolling && deployments.length === 0) fetchDeployments();
+  }, [isPolling, deployments]);
 
-  const delay = usePolling ? INTERVAL_DELAY : null;
-  useInterval(() => {
-    fetchDeployments();
-  }, delay);
+  const delay = isPolling ? INTERVAL_DELAY : null;
+  useInterval(() => { fetchDeployments(); }, delay);
 
-  return [isLoadingDeployments, deployments, hasError];
+  return [isLoadingDeployments, deployments, hasError, clearDeployments];
 }

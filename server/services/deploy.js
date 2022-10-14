@@ -1,7 +1,7 @@
 "use strict";
 
 const axios = require("axios").default;
-const { buildConfig, getFeatureAvailability } = require("./utils");
+const { buildConfig } = require("./utils");
 
 // axios.interceptors.request.use((request) => {
 //   console.log("Starting Request", JSON.stringify(request, null, 2));
@@ -11,7 +11,6 @@ const { buildConfig, getFeatureAvailability } = require("./utils");
 /**
  * @typedef {import('../../types/typedefs').RunDeployResponse} RunDeployResponse
  * @typedef {import('../../types/typedefs').CancelDeployResponse} CancelDeployResponse
- * @typedef {import('../../types/typedefs').DeployAvailabilityResponse} DeployAvailabilityResponse
  * @typedef {import('../../types/typedefs').GetDeploymentsResponse} GetDeploymentsResponse
  */
 
@@ -20,14 +19,15 @@ module.exports = ({ strapi }) => ({
    * Trigger a deploy
    * @returns {RunDeployResponse}
    */
-  async runDeploy() {
+  async runDeploy(id) {
     try {
       const config = buildConfig(strapi);
-      if (!config || !config.buildHook) {
-        throw "missing configuration: buildHook";
+      if (!config || !config.sites) {
+        throw "missing configuration: sites";
       }
-
-      const response = await axios.post(config.buildHook);
+      const buildHook = config.sites.find(site => site.id == id).buildHook;
+      console.log(buildHook);
+      const response = await axios.post(buildHook);
 
       if (response?.status != 200) {
         throw new Error(
@@ -52,7 +52,7 @@ module.exports = ({ strapi }) => ({
     try {
       const config = buildConfig(strapi);
       if (!config || !config.accessToken) {
-        throw "missing configuration: buildHook";
+        throw "missing configuration: accessToken";
       }
 
       const response = await axios.post(
@@ -78,17 +78,17 @@ module.exports = ({ strapi }) => ({
    * Fetch the list of deployments from Netlify
    * @returns {GetDeploymentsResponse}
    */
-  async getDeployments() {
+  async getDeployments(id) {
     try {
       const config = buildConfig(strapi);
       if (!config || !config.accessToken) {
-        throw "missing configuration: buildHook";
+        throw "missing configuration: accessToken";
       }
 
       const params = {  access_token: config.accessToken };
 
       const response = await axios.get(
-        `https://api.netlify.com/api/v1/sites/${config.siteId}/deploys`,
+        `https://api.netlify.com/api/v1/sites/${id}/deploys`,
         { params, }
       );
 
@@ -96,41 +96,6 @@ module.exports = ({ strapi }) => ({
     } catch (error) {
       console.error(
         "[netlify-deployments] Error while fetching deployments -",
-        error
-      );
-      return {
-        error: "An error occurred",
-      };
-    }
-  },
-
-  /**
-   * Build the availability for each feature
-   * @returns {DeployAvailabilityResponse}
-   */
-  deployAvailability() {
-    try {
-      const config = buildConfig(strapi);
-      const runDeployAvailability = getFeatureAvailability(
-        config,
-        "buildHook"
-      );
-      const listDeployAvailability = getFeatureAvailability(config, "accessToken");
-      const filterDeployAvailabilityPerName = getFeatureAvailability(
-        config,
-        "siteId"
-      );
-
-      return {
-        data: {
-          runDeploy: runDeployAvailability,
-          listDeploy: listDeployAvailability,
-          filterDeployPerAppName: filterDeployAvailabilityPerName
-        },
-      };
-    } catch (error) {
-      console.error(
-        "[netlify-deployments] Error while building deploy availability -",
         error
       );
       return {

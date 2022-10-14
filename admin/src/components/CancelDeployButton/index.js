@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 import { cancelDeploy } from "../../utils/api";
 import { LinkButton } from "@strapi/design-system/LinkButton";
-import FormattedMessage from "../FormattedMessage";
+import getTranslation from "../../utils/getTranslation";
 import { Tooltip } from "@strapi/design-system/Tooltip";
 import Cross from "@strapi/icons/Cross";
 
@@ -33,9 +33,7 @@ const CancelDeployButton = ({
 
   return (
     <Tooltip
-      description={
-        <FormattedMessage labelId="cancel-deploy-button.text" />
-      }
+      description={getTranslation('cancel-deploy-button.text')}
     >
       <LinkButton
         onClick={() => cancelDeployHandler(deployId)}

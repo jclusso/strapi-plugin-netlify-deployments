@@ -3,7 +3,8 @@
 [![npm version](https://badge.fury.io/js/strapi-plugin-netlify-deployments.svg)](https://badge.fury.io/js/strapi-plugin-netlify-deployments)
 [![strapi market link](https://img.shields.io/badge/strapi-v4-blueviolet)](https://market.strapi.io/plugins/strapi-plugin-netlify-deployments)
 
-Strapi v4 plugin to trigger, monitor, and cancel deployments on Netlify.
+Strapi v4 plugin to trigger, monitor, and cancel deployments on one or more
+Netlify sites.
 
 ## Plugin Preview
 
@@ -64,9 +65,15 @@ module.exports = ({ env }) => ({
   "netlify-deployments": {
     enabled: true,
     config: {
-      buildHook: "https://api.netlify.com/build_hooks/<hook_id>",
       accessToken: "<netlify-access-token>",
-      siteId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      sites: [
+        {
+          name: 'Site 1',
+          id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+          buildHook: "https://api.netlify.com/build_hooks/<hook_id>",
+          branch: 'master' // optional
+        }
+      ]
     },
   },
 });
@@ -74,30 +81,24 @@ module.exports = ({ env }) => ({
 
 The plugin is reading the following configuration variables to work:
 
-- `buildHook`: URL of the Build Hook in Netlify.
-
-  - You can follow [this](https://docs.netlify.com/configure-builds/build-hooks/) guide to create a build hook on Netlify
-
 - `accessToken`: Access token of your Netlify account used to fetch the list of deployments
 
   - Access tokens can be created and managed on your [user settings](https://app.netlify.com/user/applications#personal-access-tokens)
 
-- `siteId`: Site ID of your Netlify site used to filter the list of deployments
+- `sites`: An array of Netlify sites to view and manage deploys.
 
-  - Set the Site ID of your [Netlify Site](https://app.netlify.com) to see only the deployments you need. This can be found at Site settings > General.
+  - The array must have objects with a `name`, `id`, and `buildHook`. Optionally, you can include a `branch` to override the default value of `master`. The id can be found under Site settings > General and you can follow [this](https://docs.netlify.com/configure-builds/build-hooks/) guide to create a build hook.
 
 ### Environment Configuration
 
-You shouldn't disclose the Access Token or Build Hook for security reasons. Therefore, you shouldn't add these values to versioning in a public git repository. A suggested solution is to use environment variables. Example:
+You shouldn't disclose your Access Token for security reasons. Therefore, you shouldn't add this value to versioning in a public git repository. A suggested solution is to use an environment variable. Example:
 
 ```js
 module.exports = ({ env }) => ({
   "netlify-deployments": {
     enabled: true,
     config: {
-      buildHook: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_BUILD_HOOK,
-      accessToken: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_ACCESS_TOKEN,
-      siteId: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_SITE_ID
+      accessToken: process.env.NETLIFY_DEPLOYMENTS_PLUGIN_ACCESS_TOKEN
     },
   },
 });
@@ -108,9 +109,7 @@ module.exports = ({ env }) => ({
 For local development, you can add the config properties in your `.env` file:
 
 ```shell
-NETLIFY_DEPLOYMENTS_PLUGIN_BUILD_HOOK="https://api.netlify.com/build_hooks/xxxxxxxxxxxxxxxxxxxxxxxx"
 NETLIFY_DEPLOYMENTS_PLUGIN_ACCESS_TOKEN="<netlify-access-token>"
-NETLIFY_DEPLOYMENTS_PLUGIN_SITE_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
 
 #### Server
@@ -119,4 +118,4 @@ You can save these values as process env variable on your server (e.g. [this](ht
 
 ## Credits
 
-Thanks to [gianlucaparadise](https://github.com/gianlucaparadise) for making [strapi-plugin-vercel-deploy](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy) which this is heavily built from.
+Thanks to [gianlucaparadise](https://github.com/gianlucaparadise) for making [strapi-plugin-vercel-deploy](https://github.com/gianlucaparadise/strapi-plugin-vercel-deploy) which this was based on.

@@ -18,6 +18,7 @@ import CancelDeployButton from "../CancelDeployButton";
 import SymmetricBox from "../SymmetricBox";
 import FormattedMessage from "../FormattedMessage";
 import { useFormattedMessage } from "../../hooks/useFormattedMessage";
+import getTranslation from "../../utils/getTranslation";
 
 const finalStates = ["error", "ready"];
 
@@ -30,6 +31,16 @@ const getDate = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleString();
 };
+
+const getState = (entry) => {
+  if (entry?.error_message?.indexOf('Canceled build') >= 0) {
+    return 'canceled'
+  } else if (entry?.error_message?.indexOf('Skipped') >= 0) {
+    return 'skipped'
+  } else {
+    return entry.state;
+  }
+}
 
 /**
  * @param {DeploymentState} deploymentState
@@ -125,7 +136,7 @@ const truncateTitle = (title) => {
  * @param {Props} props
  * @returns {JSX.Element}
  */
-const DeploymentsList = ({ deployments, usePolling }) => {
+const DeploymentsList = ({ deployments }) => {
   const ROW_COUNT = deployments.length + 1;
   const COL_COUNT = 5;
 
@@ -171,79 +182,80 @@ const DeploymentsList = ({ deployments, usePolling }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {deployments.map((entry) => (
-          <Tr key={entry.id}>
-            <Td>
-              <Badge
-                textColor={getBranchColor(entry.branch)}
-                backgroundColor={getBranchBackgroundColor(entry.branch)}
-              >
-                {entry.branch}
-              </Badge>
-            </Td>
-            <Td>
-              <Typography textColor={cellTextColor}>{truncateTitle(entry.title)}</Typography>
-            </Td>
-            <Td>
-              <div style={{ display: "inline-flex", alignItems: "center" }}>
-              {entry.error_message && <Tooltip description={entry.error_message}>
-                  <Badge
-                    textColor={getStateColor(entry.state)}
-                    backgroundColor={getStateBackgroundColor(entry.state)}
+        {deployments.map((entry) => {
+          const state = getState(entry);
+          return(
+            <Tr key={entry.id}>
+              <Td>
+                <Badge
+                  textColor={getBranchColor(entry.branch)}
+                  backgroundColor={getBranchBackgroundColor(entry.branch)}
+                >
+                  {entry.branch}
+                </Badge>
+              </Td>
+              <Td>
+                <Typography textColor={cellTextColor}>{truncateTitle(entry.title)}</Typography>
+              </Td>
+              <Td>
+                <div style={{ display: "inline-flex", alignItems: "center" }}>
+                {entry.error_message && <Tooltip description={entry.error_message}>
+                    <Badge
+                      textColor={getStateColor(state)}
+                      backgroundColor={getStateBackgroundColor(state)}
+                    >
+                      {state}
+                    </Badge>
+                  </Tooltip>}
+                  {!entry.error_message && <Badge
+                    textColor={getStateColor(state)}
+                    backgroundColor={getStateBackgroundColor(state)}
                   >
-                    {entry.state}
-                  </Badge>
+                    {state}
+                  </Badge>}
+                  {!finalStates.includes(entry.state) && (
+                    <SymmetricBox paddingHorizontal={2} paddingVertical={0}>
+                      <Loader small>{labelLoader}</Loader>
+                    </SymmetricBox>
+                  )}
+                </div>
+              </Td>
+              <Td>
+                <Typography textColor={cellTextColor}>
+                  {entry.deploy_time ? formatDeployTime(entry.deploy_time) : "–"}
+                </Typography>
+              </Td>
+              <Td>
+                <Typography textColor={cellTextColor}>
+                  {getDate(entry.created_at)}
+                </Typography>
+              </Td>
+              <Td>
+                <Tooltip description={getTranslation('deployments-list.table-body.deploy-log-url-text')}>
+                  <LinkButton
+                    href={`${entry.admin_url}/deploys/${entry.id}`}
+                    variant="tertiary"
+                    style={{ border: "none" }}
+                  >
+                    <Layer />
+                  </LinkButton>
+                </Tooltip>
+                {state == 'ready' && <Tooltip description={
+                  getTranslation('deployments-list.table-body.visit-url-text')
+                }>
+                  <LinkButton
+                    href={entry.links.permalink}
+                    variant="tertiary"
+                    style={{ border: "none" }}
+                  >
+                    <ExternalLink />
+                  </LinkButton>
                 </Tooltip>}
-                {!entry.error_message && <Badge
-                  textColor={getStateColor(entry.state)}
-                  backgroundColor={getStateBackgroundColor(entry.state)}
-                >
-                  {entry.state}
-                </Badge>}
-                {usePolling && !finalStates.includes(entry.state) && (
-                  <SymmetricBox paddingHorizontal={2} paddingVertical={0}>
-                    <Loader small>{labelLoader}</Loader>
-                  </SymmetricBox>
-                )}
-              </div>
-            </Td>
-            <Td>
-              <Typography textColor={cellTextColor}>
-                {entry.deploy_time ? formatDeployTime(entry.deploy_time) : "–"}
-              </Typography>
-            </Td>
-            <Td>
-              <Typography textColor={cellTextColor}>
-                {getDate(entry.created_at)}
-              </Typography>
-            </Td>
-            <Td>
-              <Tooltip description={
-                <FormattedMessage labelId="deployments-list.table-body.deploy-log-url-text" />
-              }>
-                <LinkButton
-                  href={`${entry.admin_url}/deploys/${entry.id}`}
-                  variant="tertiary"
-                  style={{ border: "none" }}
-                >
-                  <Layer />
-                </LinkButton>
-              </Tooltip>
-              {entry.state == 'ready' && <Tooltip description={
-                <FormattedMessage labelId="deployments-list.table-body.visit-url-text" />
-              }>
-                <LinkButton
-                  href={entry.links.permalink}
-                  variant="tertiary"
-                  style={{ border: "none" }}
-                >
-                  <ExternalLink />
-                </LinkButton>
-              </Tooltip>}
-              {!finalStates.includes(entry.state) && (<CancelDeployButton deployId={entry.id} />)}
-            </Td>
-          </Tr>
-        ))}
+                {!finalStates.includes(entry.state) && (<CancelDeployButton deployId={entry.id} />)}
+              </Td>
+            </Tr>
+          )
+        })}
       </Tbody>
     </Table>
   );

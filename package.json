@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-netlify-deployments",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Strapi v4 plugin to trigger and monitor a deployment on Netlify",
   "repository": "https://github.com/jclusso/strapi-plugin-netlify-deployments.git",
   "author": "Jarrett Lusso <jclusso@gmail.com>",

@@ -16,9 +16,8 @@
 /**
  * Plugin config map
  * @typedef {Object} PluginConfigMap
- * @property {?string} buildHook Url of the build hook exposed in Netlify. Plugin config: `buildHook`
  * @property {?string} accessToken Access token for the Netlify user. Plugin config: `accessToken`
- * @property {?string} siteId Site Id of the site to filter Netlify deployments. Plugin config: `siteId`
+ * @property {?string} sites Array of Sites to manage with Netlify deployments. Plugin config: `sites`
  */
 
 /**
@@ -32,25 +31,6 @@
  * Info about the run deploy action
  * @typedef {Object} RunDeployData
  * @property {string} deployJobId
- */
-
-/**
- * Describe the availability of a feature
- * @typedef {("AVAILABLE"|"MISSING_CONFIG_OBJECT"|"MISSING_CONFIG_VARIABLE")} FeatureAvailability
- */
-
-/**
- * @typedef {Object} DeployAvailabilityResponse
- * @property {DeployAvailability} data Root object with the availabilities
- * @property {ErrorResponseData} error Object containing the error, if any
- */
-
-/**
- * @typedef {Object} DeployAvailability
- * @property {FeatureAvailability} runDeploy Describe the availability of the run deploy feature
- * @property {FeatureAvailability} listDeploy Describe the availability of the deploy list feature
- * @property {FeatureAvailability} filterDeployPerAppName Describe the availability of the filtering deploy list by name feature
- * @property {FeatureAvailability} filterDeployPerTeamId Describe the availability of the filtering deploy list by Team Id feature
  */
 
 /**
