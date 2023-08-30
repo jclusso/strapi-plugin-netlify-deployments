@@ -25,7 +25,7 @@ import { getConfig } from "../../utils/api";
 import FormattedMessage from "../../components/FormattedMessage";
 import ExternalLink from "../../components/ExternalLink";
 import { useFormattedMessage } from "../../hooks/useFormattedMessage";
-import DeploymentsEmptyState from "../components/DeploymentsEmptyState";
+import DeploymentsEmptyState from "../../components/DeploymentsEmptyState";
 
 /**
  * @typedef {import('../../../../types/typedefs').PluginConfigMap} PluginConfigMap
