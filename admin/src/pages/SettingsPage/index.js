@@ -138,6 +138,19 @@ const SettingsContainer = () => {
         <SitesList sites={sites} />
         <FieldHint />
       </BoxField>
+
+      <BoxField fieldHint={
+        <FormattedMessage labelId="test" />
+      }>
+        <Box paddingBottom={2}>
+          <Typography variant="beta">
+            <FormattedMessage labelId="label" />
+          </Typography>
+        </Box>
+        <SitesList sites={[]} />
+        <FieldHint />
+        <p>settings page</p>
+      </BoxField>
     </>
   );
 };

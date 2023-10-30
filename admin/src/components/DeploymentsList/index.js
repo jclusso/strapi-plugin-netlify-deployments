@@ -5,20 +5,12 @@
  */
 
 import React from "react";
-import { Table, Thead, Tbody, Tr, Td, Th } from "@strapi/design-system/Table";
-import { Typography } from "@strapi/design-system/Typography";
-import { Tooltip } from "@strapi/design-system/Tooltip";
-import { LinkButton } from "@strapi/design-system/LinkButton";
-import { Badge } from "@strapi/design-system/Badge";
-import { Loader } from "@strapi/design-system/Loader";
-import ExternalLink from "@strapi/icons/ExternalLink";
-import Layer from "@strapi/icons/Layer";
+import { Table, Thead, Tbody, Tr, Td, Th, Typography, Tooltip, LinkButton, Badge } from "@strapi/design-system";
+import { ExternalLink, Layer } from "@strapi/icons";
 import CancelDeployButton from "../CancelDeployButton";
-
-import SymmetricBox from "../SymmetricBox";
 import FormattedMessage from "../FormattedMessage";
-import { useFormattedMessage } from "../../hooks/useFormattedMessage";
 import getTranslation from "../../utils/getTranslation";
+import State from "../State";
 
 const finalStates = ["error", "ready"];
 
@@ -43,57 +35,12 @@ const getState = (entry) => {
 }
 
 /**
- * @param {DeploymentState} deploymentState
- * @returns {string} Strapi color
- */
-const getStateColor = (deploymentState) => {
-  switch (deploymentState) {
-    case "error":
-      return "danger700";
-
-    case "ready":
-      return "success700";
-
-    case "building":
-    case "enqueued":
-    case "preparing":
-    case "processing":
-      return "warning700"
-
-    default:
-      return "neutral700";
-  }
-};
-
-/**
- * @param {DeploymentState} deploymentState
- * @returns {string} Strapi color
- */
-const getStateBackgroundColor = (deploymentState) => {
-  switch (deploymentState) {
-    case "error":
-      return "danger100";
-
-    case "ready":
-      return "success100";
-
-    case "building":
-    case "enqueued":
-    case "preparing":
-    case "processing":
-      return "warning100"
-
-    default:
-      return "neutral100";
-  }
-};
-
-/**
  * @param {DeploymentBranch} deploymentBranch
  * @returns {string} Strapi color
  */
 const getBranchColor = (deploymentBranch) => {
   switch (deploymentBranch) {
+    case "main":
     case "master":
       return "danger700";
 
@@ -108,6 +55,7 @@ const getBranchColor = (deploymentBranch) => {
  */
 const getBranchBackgroundColor = (deploymentBranch) => {
   switch (deploymentBranch) {
+    case "main":
     case "master":
       return "danger100";
 
@@ -139,8 +87,6 @@ const truncateTitle = (title) => {
 const DeploymentsList = ({ deployments }) => {
   const ROW_COUNT = deployments.length + 1;
   const COL_COUNT = 5;
-
-  const labelLoader = useFormattedMessage("home-page.deployments.loader");
 
   const headerFontVariant = "sigma";
   const cellTextColor = "neutral800";
@@ -184,6 +130,7 @@ const DeploymentsList = ({ deployments }) => {
       <Tbody>
         {deployments.map((entry) => {
           const state = getState(entry);
+
           return(
             <Tr key={entry.id}>
               <Td>
@@ -198,27 +145,7 @@ const DeploymentsList = ({ deployments }) => {
                 <Typography textColor={cellTextColor}>{truncateTitle(entry.title)}</Typography>
               </Td>
               <Td>
-                <div style={{ display: "inline-flex", alignItems: "center" }}>
-                {entry.error_message && <Tooltip description={entry.error_message}>
-                    <Badge
-                      textColor={getStateColor(state)}
-                      backgroundColor={getStateBackgroundColor(state)}
-                    >
-                      {state}
-                    </Badge>
-                  </Tooltip>}
-                  {!entry.error_message && <Badge
-                    textColor={getStateColor(state)}
-                    backgroundColor={getStateBackgroundColor(state)}
-                  >
-                    {state}
-                  </Badge>}
-                  {!finalStates.includes(entry.state) && (
-                    <SymmetricBox paddingHorizontal={2} paddingVertical={0}>
-                      <Loader small>{labelLoader}</Loader>
-                    </SymmetricBox>
-                  )}
-                </div>
+                <State {...{entry, finalStates, state}} />
               </Td>
               <Td>
                 <Typography textColor={cellTextColor}>

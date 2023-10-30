@@ -3,6 +3,10 @@ import pluginPkg from "../../package.json";
 import pluginId from "./pluginId";
 import Initializer from "./components/Initializer";
 import PluginIcon from "./components/PluginIcon";
+import * as yup from 'yup';
+import getTrad from "./utils/getTrad";
+import CheckboxConfirmation from "./components/CheckboxConfirmation";
+import EditView from "./components/EditView/EditView";
 
 const name = pluginPkg.strapi.name;
 
@@ -69,7 +73,46 @@ export default {
     });
   },
 
-  bootstrap(app) {},
+  bootstrap(app) {
+    app.injectContentManagerComponent('editView', 'right-links', {
+      name: 'url-alias-edit-view',
+      Component: EditView,
+    });
+
+    // const ctbPlugin = app.getPlugin('content-type-builder');
+
+    // if (ctbPlugin) {
+    //   const ctbFormsAPI = ctbPlugin.apis.forms;
+    //   // ctbFormsAPI.addContentTypeSchemaMutation(mutateCTBContentTypeSchema);
+    //   ctbFormsAPI.components.add({ id: 'url-alias.checkboxConfirmation', component: CheckboxConfirmation });
+
+    //   ctbFormsAPI.extendContentType({
+    //     validator: () => ({
+    //       'url-alias': yup.object().shape({
+    //         enabled: yup.bool().default(true),
+    //       }),
+    //     }),
+    //     form: {
+    //       advanced() {
+    //         return [
+    //           {
+    //             name: 'pluginOptions.url-alias.enabled',
+    //             description: {
+    //               id: getTrad('url-alias.enabled.description-content-type'),
+    //               defaultMessage: 'Enable URL alias - allows urls to be created for this content type',
+    //             },
+    //             type: 'url-alias.checkboxConfirmation',
+    //             intlLabel: {
+    //               id: getTrad('url-alias.enabled.label-content-type'),
+    //               defaultMessage: 'Url alias',
+    //             },
+    //           },
+    //         ];
+    //       },
+    //     },
+    //   });
+    // }
+  },
   async registerTrads({ locales }) {
     const importedTrads = await Promise.all(
       locales.map((locale) => {

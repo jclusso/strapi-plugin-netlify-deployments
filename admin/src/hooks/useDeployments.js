@@ -28,7 +28,7 @@ const containsNonFinalState = (deployments) => {
 /**
  * Fetch and return the list of deployments
  * @param {boolean} isPolling
- * @returns {[Boolean, Deployment[], Boolean]} [isLoading, deployments, hasError]
+ * @returns {[Boolean, Deployment[], Boolean, Function]} [isLoading, deployments, hasError]
  */
 export function useDeployments(isPolling, siteId, setPolling) {
   /** @type {Deployment[]} */

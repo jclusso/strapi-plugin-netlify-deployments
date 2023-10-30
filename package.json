@@ -25,9 +25,9 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "@strapi/strapi": "^4.1.9",
-    "axios": "^0.26.1",
-    "react-intl": "^5.25.1"
+    "@strapi/strapi": "^4.15.0",
+    "axios": "^1.6.0",
+    "react-intl": "^6.5.1"
   },
   "keywords": [
     "strapi",

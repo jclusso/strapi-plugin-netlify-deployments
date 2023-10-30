@@ -3,3 +3,6 @@ node_modules
 .env
 .npmrc
 .DS_Store
+
+.vscode
+.vscode/settings.json

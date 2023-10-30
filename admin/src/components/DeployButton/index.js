@@ -73,7 +73,7 @@ const DeployButton = ({
           <DeployErrorMessage type={"ERROR_DEPLOY"} />
         </SymmetricBox>
       )}
-      <SymmetricBox paddingHorizontal={4}>
+      <SymmetricBox paddingHorizontal={0}>
         <Button onClick={() => setIsVisible(true)} disabled={isLoading}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Plus />

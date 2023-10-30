@@ -6,7 +6,7 @@
 
 import React from "react";
 
-import { Link } from "@strapi/design-system/Link";
+import { Link } from "@strapi/design-system";
 
 /**
  * @typedef {import('./typedefs').Props} Props
